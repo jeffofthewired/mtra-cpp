@@ -2,7 +2,12 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "vector",
-    hdrs = ["vector.h"],
+    hdrs = [
+        "vector.h",
+        "internal/normal_iterator.h",
+    ],
+    srcs = [],
+    deps = [],
 )
 
 cc_test(

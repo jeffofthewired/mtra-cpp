@@ -3,3 +3,4 @@ bazel-mtra-cpp
 bazel-out
 bazel-testlogs
 MODULE.bazel.lock
+compile_commands.json

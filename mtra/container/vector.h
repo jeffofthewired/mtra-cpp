@@ -1,14 +1,17 @@
 #pragma once
 
-#include <limits>
 #include <memory>
-#include <new>
-#include <type_traits>
+
+#include "mtra/container/internal/normal_iterator.h"
 
 namespace mtra {
 
 template<typename T, typename A = std::allocator<T>>
 class vector {
+// aliases
+public:
+    using alloc_traits = std::allocator_traits<A>;
+
 // essential variables, constants and classes
 private:
     A alloc_;
@@ -22,16 +25,16 @@ private:
 public:
     vector() : 
         alloc_{},
-        data_{std::allocator_traits<A>::allocate(alloc_, k_init_capacity)},
+        data_{alloc_traits::allocate(alloc_, k_init_capacity)},
         capacity_{k_init_capacity}, 
         size_{0}
     {}
 
     ~vector() {
         for (std::size_t i = 0; i < size_; ++i) {
-            std::allocator_traits<A>::destroy(alloc_, data_ + i);
+            alloc_traits::destroy(alloc_, data_ + i);
         }
-        std::allocator_traits<A>::deallocate(alloc_, data_, capacity_);
+        alloc_traits::deallocate(alloc_, data_, capacity_);
     }
 
 // essential member functions
@@ -46,12 +49,31 @@ public:
 
     auto reserve(std::size_t new_capacity) -> void {
         if (new_capacity <= capacity_) [[unlikely]] return;
-        auto new_data = std::allocator_traits<A>::allocate(alloc_, new_capacity);
-        for (std::size_t i = 0; i < size_; ++i) {
-            std::allocator_traits<A>::construct(alloc_, new_data + i, data_[i]);
-            std::allocator_traits<A>::destroy(alloc_, data_ + i);
+        auto new_data = alloc_traits::allocate(alloc_, new_capacity);
+
+        std::size_t i = 0;
+        try {
+            for (; i < size_; ++i) {
+                alloc_traits::construct(alloc_, new_data + i, std::move_if_noexcept(data_[i]));
+            }
+        } catch (...) {
+            for (std::size_t j = 0; j < i; ++j) {
+                alloc_traits::destroy(alloc_, new_data + j);
+            }
+            alloc_traits::deallocate(alloc_, new_data, new_capacity);
+            throw;
         }
-        std::allocator_traits<A>::deallocate(alloc_, data_, capacity_);
+
+        // clean up the old data
+        for (std::size_t i = 0; i < size_; ++i) {
+            alloc_traits::destroy(alloc_, data_ + i);
+        }
+
+        if (data_) {
+            alloc_traits::deallocate(alloc_, data_, capacity_);
+        }
+
+        data_ = new_data;
         capacity_ = new_capacity;
     }
 
@@ -63,7 +85,7 @@ public:
     template<typename ...Args>
     auto emplace_back(Args&&... args) -> void {
         if (size_ == capacity_) [[unlikely]] reserve(capacity_ * k_growth_factor);
-        std::allocator_traits<A>::construct(alloc_, data_ + size_, std::forward<Args>(args)...);
+        alloc_traits::construct(alloc_, data_ + size_, std::forward<Args>(args)...);
         ++size_;
     }
 
@@ -72,6 +94,20 @@ public:
     auto operator[](std::size_t index) -> T& {
         return data_[index];
     }
+
+// TODO: iterator functions: begin, end, rbegin, rend
+public:
+    using iterator = normal_iterator<T*, vector<T>>;
+
+    auto begin() -> iterator {
+        return normal_iterator<T*, vector<T>>(data_);
+    }
+
+    auto end() -> iterator {
+        return normal_iterator<T*, vector<T>>(data_ + size_);
+    }
+
+private: 
 
 };
 
