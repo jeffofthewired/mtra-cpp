@@ -1,0 +1,39 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "spsc_queue_locked",
+    hdrs = ["spsc_queue_locked.h"],
+)
+
+cc_test(
+    name = "spsc_queue_locked_test",
+    srcs = ["spsc_queue_locked_test.cc"],
+    deps = [
+        ":spsc_queue_locked",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "spsc_queue_lockfree",
+    hdrs = ["spsc_queue_lockfree.h"],
+)
+
+cc_test(
+    name = "spsc_queue_lockfree_test",
+    srcs = ["spsc_queue_lockfree_test.cc"],
+    deps = [
+        ":spsc_queue_lockfree",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "spsc_queue_comparison_benchmark",
+    srcs = ["spsc_queue_comparison_benchmark.cc"],
+    deps = [
+        ":spsc_queue_locked",
+        ":spsc_queue_lockfree",
+        "@google_benchmark//:benchmark_main",
+    ]
+)
