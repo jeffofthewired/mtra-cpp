@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 
 namespace mtra {
 
@@ -126,9 +127,99 @@ template <typename T> struct is_volatile<const T> : true_type {};
 
 // mtra::is_constructible
 // checks if a type has a constructor for specific arguments
+template <typename T, typename... Args>
+struct is_constructible {
+private:
+    template <typename U, typename... A, typename = decltype(U(std::declval<A>()...))>
+    static auto test(int) -> true_type;
 
+    template <typename, typename...>
+    static auto test(...) -> false_type;
 
+public:
+    static constexpr bool value = decltype(test<T, Args...>(0))::value;
+};
+// trivially & nothrow are missing...
 
+// mtra::is_default_constructible
+// checks if a type has a default constructor
+template <typename T>
+struct is_default_constructible : is_constructible<T> {};
+// trivially & nothrow are missing...
+
+// mtra::is_copy_constructible
+// checks if a type has a copy constructor
+template <typename T>
+struct is_copy_constructible : is_constructible<T, const T&> {};
+// trivially & nothrow are missing...
+
+// mtra::is_move_constructible
+// checks if a type has a move constructor
+template <typename T>
+struct is_move_constructible : is_constructible<T, T&&> {}; 
+// trivially & nothrow are missing...
+
+// mtra::is_assignable
+// checks if a type has an assignment operator for a specific argument
+template <typename T, typename Arg>
+struct is_assignable {
+private:
+    template <
+        typename U,
+        typename A,
+        typename = decltype(std::declval<U>().operator=(std::declval<A>()))
+    >
+    static auto test(int) -> true_type;
+
+    template <typename, typename>
+    static auto test(...) -> false_type;
+
+public:
+    static constexpr bool value = decltype(test<T, Arg>(0))::value;
+};
+// trivially & nothrow are missing
+
+// mtra::is_copy_assignable
+// checks if a type has a copy assignment operator
+template <typename T>
+struct is_copy_assignable : is_assignable<T, const T&> {};
+
+// mtra::is_move_assignable
+// checks if a type has a move assignment operator
+template <typename T>
+struct is_move_assignable : is_assignable<T, T&&> {};
+
+// mtra::is_destructible
+// checks if a type has a non-deleted destructor
+template <typename T>
+struct is_destructible {
+private:
+    template <typename U, typename = decltype(std::declval<U&>().~U())>
+    static auto test(int) -> true_type;
+
+    template <typename>
+    static auto test(...) -> false_type;
+
+public:
+    static constexpr bool value = decltype(test<T>(0))::value;
+};
+
+// mtra::has_virtual_destructor
+// checks if a type has a virtual destructor
+// MISSING
+//
+// the remaining traits are also missing...
+//
+/// PROPERTY QUERIES
+// all missing...
+
+/// TYPE RELATIONSHIPS
+template <typename A, typename B>
+struct is_same : false_type {};
+template <typename A>
+struct is_same<A, A> : true_type {};
+
+// to be continued...
 
 /// TYPE TRANSFORMATIONS
 
