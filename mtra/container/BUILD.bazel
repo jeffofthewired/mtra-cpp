@@ -1,0 +1,24 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "vector",
+    hdrs = ["vector.h"],
+)
+
+cc_test(
+    name = "vector_test",
+    srcs = ["vector_test.cc"],
+    deps = [
+        ":vector",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "vector_benchmark",
+    srcs = ["vector_benchmark.cc"],
+    deps = [
+        ":vector",
+        "@google_benchmark//:benchmark_main",
+    ]
+)

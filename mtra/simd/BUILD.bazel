@@ -1,0 +1,15 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "poly_float",
+    hdrs = ["poly_float.h"],
+)
+
+cc_test(
+    name = "poly_float_test",
+    srcs = ["poly_float_test.cc"],
+    deps = [
+        ":poly_float",
+        "@googletest//:gtest_main",
+    ],
+)

@@ -1,0 +1,15 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "unique_ptr",
+    hdrs = ["unique_ptr.h"],
+)
+
+cc_test(
+    name = "unique_ptr_test",
+    srcs = ["unique_ptr_test.cc"],
+    deps = [
+        ":unique_ptr",
+        "@googletest//:gtest_main",
+    ],
+)
