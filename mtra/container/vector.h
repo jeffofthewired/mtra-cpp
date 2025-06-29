@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "mtra/container/internal/normal_iterator.h"
-#include "mtra/container/internal/reverse_iterator.h"
+#include "mtra/iterator/normal_iterator.h"
+#include "mtra/iterator/reverse_iterator.h"
 
 namespace mtra {
 

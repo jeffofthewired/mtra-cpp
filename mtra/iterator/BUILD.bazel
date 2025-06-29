@@ -1,0 +1,9 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "iterator",
+    hdrs = [
+        "normal_iterator.h",
+        "reverse_iterator.h",
+    ],
+)
