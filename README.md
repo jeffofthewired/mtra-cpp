@@ -6,7 +6,9 @@
 - smart pointers (coming soon)
 
 ### Future Plans
-- spsc queue
+- write full tests for `mtra::vector`
+
+- write `mtra::spsc_queue_lockfree` and tests
 
 - SIMD utilities will only work on architectures supporting AVX2
 

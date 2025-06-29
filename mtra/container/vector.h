@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "mtra/container/internal/normal_iterator.h"
+#include "mtra/container/internal/reverse_iterator.h"
 
 namespace mtra {
 
@@ -100,11 +101,19 @@ public:
     using iterator = normal_iterator<T*, vector<T>>;
 
     auto begin() -> iterator {
-        return normal_iterator<T*, vector<T>>(data_);
+        return iterator(data_);
     }
 
     auto end() -> iterator {
-        return normal_iterator<T*, vector<T>>(data_ + size_);
+        return iterator(data_ + size_);
+    }
+
+    auto rbegin() -> reverse_iterator<iterator> {
+        return reverse_iterator(iterator(data_ + size_));
+    }
+
+    auto rend() -> reverse_iterator<iterator> {
+        return reverse_iterator(iterator(data_));
     }
 
 private: 

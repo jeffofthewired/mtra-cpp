@@ -1,12 +1,12 @@
 #pragma once
 
-// TODO: sub this out with mine later
 #include <iterator>
+#include <memory>
 
 namespace mtra {
 
-template<typename Iterator, typename Container>
-class normal_iterator {
+template <typename Iterator>
+class reverse_iterator {
 // aliases
 public:
     using iterator_type = Iterator;
@@ -22,8 +22,12 @@ private:
 
 // resource management
 public:
-    normal_iterator() : current_{} {} 
-    explicit normal_iterator(iterator_type iter) : current_{iter} {} 
+    reverse_iterator() = default;
+    explicit reverse_iterator(iterator_type iter) : current_{iter} {} 
+
+    // "copy constructor" for when base iterator U can be converted to T
+    template <typename U>
+    reverse_iterator(const reverse_iterator<U>& other) : current_{other.base()} {}
 
 // member functions and operator overloads
 public:
@@ -32,30 +36,33 @@ public:
     }
 
     auto operator*() const -> reference {
-        return *current_;
+        iterator_type tmp(current_);
+        return *--tmp;
     }
 
     auto operator->() const -> pointer {
-        return current_;
+        iterator_type tmp(current_);
+        return std::addressof(operator*());
     }
 
-    auto operator++() -> normal_iterator& {
-        ++current_;
-        return *this;
-    }
-
-    auto operator++(int dummy) -> normal_iterator& {
-        return normal_iterator(current_++);
-    }
-
-    auto operator--() -> normal_iterator& {
+    auto operator++() -> reverse_iterator& {
         --current_;
         return *this;
     }
 
-    auto operator--(int dummy) -> normal_iterator& {
-        return normal_iterator(current_--);
+    auto operator++(int dummy) -> reverse_iterator& {
+        return normal_iterator(current_++);
     }
+
+    auto operator--() -> reverse_iterator& {
+        ++current_;
+        return *this;
+    }
+
+    auto operator--(int dummy) -> reverse_iterator& {
+        return normal_iterator(current_++);
+    }
+
 };
 
 }

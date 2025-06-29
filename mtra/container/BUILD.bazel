@@ -5,6 +5,7 @@ cc_library(
     hdrs = [
         "vector.h",
         "internal/normal_iterator.h",
+        "internal/reverse_iterator.h",
     ],
     srcs = [],
     deps = [],
