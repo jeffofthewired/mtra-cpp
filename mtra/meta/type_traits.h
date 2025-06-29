@@ -219,11 +219,13 @@ struct is_same : false_type {};
 template <typename A>
 struct is_same<A, A> : true_type {};
 
-// to be continued...
+// MISSING: to be continued...
 
 /// TYPE TRANSFORMATIONS
 
 // mtra::remove_cv
+// mtra::remove_const
+// mtra::remove_volatile
 // removes const and/or volatile specifiers from the given type
 
 template <typename T>
@@ -246,9 +248,6 @@ struct remove_cv<const volatile T> {
     using type = T;
 };
 
-//  mtra::remove_const
-//  removes const specifiers from the given type
-
 template <typename T>
 struct remove_const {
     using type = T;
@@ -258,9 +257,6 @@ template <typename T>
 struct remove_const<const T> {
     using type = T;
 };
-
-//  mtra::remove_const
-//  removes const specifiers from the given type
 
 template <typename T>
 struct remove_volatile {
@@ -272,4 +268,117 @@ struct remove_volatile<volatile T> {
     using type = T;
 };
 
+// mtra::add_cv
+// mtra::add_const
+// mtra::add_volatile
+// adds const and/or volatile specifiers to a given type
+template <typename T>
+struct add_cv {
+    using type = const volatile T;
+};
+
+template <typename T>
+struct add_const {
+    using type = const T;
+};
+
+template <typename T>
+struct add_volatile {
+    using type = volatile T;
+};
+
+// mtra::remove_reference
+// removes a reference from the given type
+template <typename T>
+struct remove_reference {
+    using type = T;
+};
+
+template <typename T>
+struct remove_reference<T&> {
+    using type = T;
+};
+
+template <typename T>
+struct remove_reference<T&&> {
+    using type = T;
+};
+
+// mtra::add_lvalue_reference
+// just naively chucks an extra & on the end
+// may result in reference collapsing?
+template <typename T>
+struct add_lvalue_reference {
+    using type = T&;
+};
+
+// mtra::add_rvalue_reference
+template <typename T>
+struct add_rvalue_reference {
+    using type = T&&;
+};
+
+// MISSING
+// skipping all the sign modifiers...
+
+// mtra::remove_pointer
+template <typename T>
+struct remove_pointer {
+    using type = T;
+};
+
+template <typename T>
+struct remove_pointer<T *> {
+    using type = T;
+};
+
+// mtra::add_pointer
+template <typename T>
+struct add_pointer {
+    using type = T*;
+};
+
+/// OTHER TRANSFORMATIONS
+// skipped the first few
+
+// mtra::decay
+// applies type transformations as when passing a function argument by value
+// BLOCKER: have to implement is_array and is_function first
+
+// mtra::enable_if
+// conditionally removes a function overload or template specialization from overload resolution
+template <bool Cond, typename T = void>
+struct enable_if { };
+
+template <typename T>
+struct enable_if<true, T> {
+    using type = T;
+};
+
+// mtra::conditional
+// chooses one type or another based on compile-time boolean
+template <bool Cond, typename T, typename F>
+struct conditional {
+    using type = F;
+};
+
+template <typename T, typename F>
+struct conditional<true, T, F> {
+    using type = T;
+};
+
+// MISSING skipping a few...
+// ...
+
+// mtra::result_of
+// invoke_result
+// deduces the result type of invoking a callable object with a set of arguments
+template <typename F, typename... Args>
+struct result_of {
+    using type = decltype(std::declval<F>()(std::declval<Args>()...));
+};
+
+// mtra::void_t
+
 }
+
