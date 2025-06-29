@@ -8,5 +8,3 @@
 - Make use of iterator differences
 
 - Implement random access iterators
-
-- Internal rb-tree class

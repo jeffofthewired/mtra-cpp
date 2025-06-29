@@ -11,16 +11,30 @@ template<typename T, typename A = std::allocator<T>>
 class vector {
 // aliases
 public:
-    using alloc_traits = std::allocator_traits<A>;
+    using value_type = T;
+    using allocator_type = A;
+    using alloc_traits = std::allocator_traits<allocator_type>;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using size_type = typename alloc_traits::size_type;
+    using difference_type = typename alloc_traits::difference_type;
+    using pointer = typename alloc_traits::pointer;
+    using const_pointer = typename alloc_traits::const_pointer;
+
+    // figure out what llvm means by __wrap_iter<pointer> and __wrap_iter<const_pointer>
+    using iterator = normal_iterator<pointer, vector<T, A>>;
+    using const_iterator = normal_iterator<const_pointer, vector<T, A>>;
+    using reverse_iterator = mtra::reverse_iterator<iterator>;
+    using const_reverse_iterator = mtra::reverse_iterator<const_iterator>;
 
 // essential variables, constants and classes
 private:
-    A alloc_;
-    T *data_;
-    std::size_t capacity_;
-    std::size_t size_;
-    static constexpr std::size_t k_init_capacity = 16;
-    static constexpr std::size_t k_growth_factor = 2;
+    allocator_type alloc_;
+    pointer data_;
+    size_type capacity_;
+    size_type size_;
+    static constexpr size_type k_init_capacity = 16;
+    static constexpr size_type k_growth_factor = 2;
 
 // essential resource management
 public:
@@ -32,7 +46,7 @@ public:
     {}
 
     ~vector() {
-        for (std::size_t i = 0; i < size_; ++i) {
+        for (size_type i = 0; i < size_; ++i) {
             alloc_traits::destroy(alloc_, data_ + i);
         }
         alloc_traits::deallocate(alloc_, data_, capacity_);
@@ -40,25 +54,25 @@ public:
 
 // essential member functions
 public:
-    auto size() -> std::size_t {
+    auto size() -> size_type {
         return size_;
     }
 
-    auto capacity() -> std::size_t {
+    auto capacity() -> size_type {
         return capacity_;
     }
 
-    auto reserve(std::size_t new_capacity) -> void {
+    auto reserve(size_type new_capacity) -> void {
         if (new_capacity <= capacity_) [[unlikely]] return;
         auto new_data = alloc_traits::allocate(alloc_, new_capacity);
 
-        std::size_t i = 0;
+        size_type i = 0;
         try {
             for (; i < size_; ++i) {
                 alloc_traits::construct(alloc_, new_data + i, std::move_if_noexcept(data_[i]));
             }
         } catch (...) {
-            for (std::size_t j = 0; j < i; ++j) {
+            for (size_type j = 0; j < i; ++j) {
                 alloc_traits::destroy(alloc_, new_data + j);
             }
             alloc_traits::deallocate(alloc_, new_data, new_capacity);
@@ -66,7 +80,7 @@ public:
         }
 
         // clean up the old data
-        for (std::size_t i = 0; i < size_; ++i) {
+        for (size_type i = 0; i < size_; ++i) {
             alloc_traits::destroy(alloc_, data_ + i);
         }
 
@@ -92,13 +106,12 @@ public:
 
 // essential operator overloads
 public:
-    auto operator[](std::size_t index) -> T& {
+    auto operator[](size_type index) -> T& {
         return data_[index];
     }
 
 // TODO: iterator functions: begin, end, rbegin, rend
 public:
-    using iterator = normal_iterator<T*, vector<T>>;
 
     auto begin() -> iterator {
         return iterator(data_);
@@ -108,11 +121,11 @@ public:
         return iterator(data_ + size_);
     }
 
-    auto rbegin() -> reverse_iterator<iterator> {
+    auto rbegin() -> reverse_iterator {
         return reverse_iterator(iterator(data_ + size_));
     }
 
-    auto rend() -> reverse_iterator<iterator> {
+    auto rend() -> reverse_iterator {
         return reverse_iterator(iterator(data_));
     }
 
