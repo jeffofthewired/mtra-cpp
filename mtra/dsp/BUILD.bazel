@@ -1,0 +1,6 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "hermite_interpolation",
+    hdrs = ["hermite_interpolation.h"],
+)

@@ -35,5 +35,5 @@ cc_binary(
         ":spsc_queue_locked",
         ":spsc_queue_lockfree",
         "@google_benchmark//:benchmark_main",
-    ]
+    ],
 )

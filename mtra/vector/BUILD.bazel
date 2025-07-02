@@ -5,7 +5,7 @@ cc_library(
     hdrs = [
         "vector.h",
     ],
-    deps = ["//mtra/iterator:iterator"]
+    deps = ["//mtra/iterator:iterator"],
 )
 
 cc_test(
@@ -23,5 +23,5 @@ cc_binary(
     deps = [
         ":vector",
         "@google_benchmark//:benchmark_main",
-    ]
+    ],
 )
