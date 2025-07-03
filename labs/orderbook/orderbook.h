@@ -54,9 +54,7 @@ private:
     id_lookup_t id_lookup_;
 
 public:
-    NaiveOrderbook() : price_lookup_(Side()) {
-
-    }
+    NaiveOrderbook() : price_lookup_(Side()) {}
 
     auto insert(Order order) -> id_type {
         order.timestamp = seq_no_;
@@ -68,8 +66,9 @@ public:
 
     // returns updated order to insert into the other side
     auto match(Order order) -> Order {
-        auto first_match = price_lookup_.lower_bound({order.price, 0, -1, 0, 0});
-        // but you must keep finding matches until our order quantity is filled
+        while (true) {
+            auto best = price_lookup_.lower_bound({order.price, 0, -1, 0, 0});
+        }
     }
 
     auto remove(id_type order_id) -> void {
