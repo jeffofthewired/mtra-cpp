@@ -1,0 +1,18 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "orderbook",
+    hdrs = [
+        "orderbook.h",
+    ],
+)
+
+cc_test(
+    name = "orderbook_test",
+    srcs = ["orderbook_test.cc"],
+    deps = [
+        ":orderbook",
+        "@googletest//:gtest_main",
+    ],
+)
+
