@@ -157,6 +157,20 @@ public:
     force_inline friend poly_float clamp(const poly_float& x, float clamp_min, float clamp_max) {
         return max(poly_float::broadcast(clamp_min), min(poly_float::broadcast(clamp_max), x));
     }
+
+// new additions for compatibility with hermite interpolation
+public:
+    // returns true if FIRST ELEMENT is greater
+    force_inline friend auto operator>(const poly_float& lhs, const poly_float& rhs) -> bool {
+        // don't need this intrinsic because we only return one element
+        // _mm256_cmp_ps(lhs.data_.vector[i], rhs.data_.vector[i], _CMP_GT_OQ)
+        return lhs.data_.scalar[0] > rhs.data_.scalar[0];
+    }
+
+    // returns true if FIRST ELEMENT is smaller
+    force_inline friend auto operator<(const poly_float& lhs, const poly_float& rhs) -> bool {
+        return lhs.data_.scalar[0] < rhs.data_.scalar[0];
+    }
 };
 
 }

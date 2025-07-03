@@ -1,0 +1,11 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "hermite_visual",
+    srcs = ["hermite_visual.cc"],
+    deps = [
+        "//mtra/dsp:hermite_interpolation",
+        "//mtra/span:span",
+        "//mtra/simd:poly_float",
+    ],
+)

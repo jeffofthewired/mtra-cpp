@@ -4,3 +4,25 @@ cc_library(
     name = "hermite_interpolation",
     hdrs = ["hermite_interpolation.h"],
 )
+
+cc_test(
+    name = "hermite_interpolation_test",
+    srcs = ["hermite_interpolation_test.cc"],
+    deps = [
+        ":hermite_interpolation",
+        "//mtra/simd:poly_float",
+        "//mtra/span:span",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "hermite_interpolation_benchmark",
+    srcs = ["hermite_interpolation_benchmark.cc"],
+    deps = [
+        "//mtra/dsp:hermite_interpolation",
+        "//mtra/span:span",
+        "//mtra/simd:poly_float",
+        "@google_benchmark//:benchmark_main",
+    ],
+)
