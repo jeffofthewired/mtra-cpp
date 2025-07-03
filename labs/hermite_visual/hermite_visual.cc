@@ -9,11 +9,6 @@ i will then visualise this in R or something
 #include "mtra/dsp/hermite_interpolation.h"
 #include "mtra/span/span.h"
 
-constexpr static std::size_t POLY_NUM = 32;
-constexpr static std::size_t MAX_LEN = 1<<16;
-constexpr static std::size_t BUF_SIZE = 256;
-constexpr static std::size_t WIN_SIZE = 256;
-
 template <typename T>
 struct file_output {
     auto write(float val) -> void {
@@ -25,7 +20,7 @@ int main() {
     std::cout << "hello world!\n";
     file_output<float> os;
     mtra::hermite_interpolator<file_output<float>, float, float> interp{os, 0., 0.1, 0., 1.};
-    std::vector<float> v(2048, 0.);
+    std::vector<float> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
     mtra::span<float> sp(v.data(), v.size());
     interp.write(sp);
 }
