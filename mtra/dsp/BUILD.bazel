@@ -25,4 +25,5 @@ cc_binary(
         "//mtra/simd:poly_float",
         "@google_benchmark//:benchmark_main",
     ],
+    copts = ["-mavx"],
 )

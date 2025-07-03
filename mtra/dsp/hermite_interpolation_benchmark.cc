@@ -42,7 +42,7 @@ static void BM_float_interpolation(benchmark::State& state) {
     for (auto _ : state) {
         auto len = state.range(0);
 
-        for (std::size_t i = 0; i < len; i += WIN_SIZE) {
+        for (int i = 0; i < len; i += WIN_SIZE) {
             // iterates up within the window
             for (std::size_t v = 0; v < POLY_NUM; ++v) {
                 mtra::span<float> window{inputs[v].data() + i, WIN_SIZE};
@@ -65,7 +65,7 @@ static void BM_polyfloat_interpolation(benchmark::State& state) {
 
     for (auto _ : state) {
         auto len = state.range(0);
-        for (std::size_t i = 0; i < len; i += WIN_SIZE) {
+        for (int i = 0; i < len; i += WIN_SIZE) {
             // first load into these polyfloats
             for (std::size_t sample = 0; sample < WIN_SIZE; ++sample) {
 

@@ -134,9 +134,11 @@ public:
                     curr_output_pos_ - curr_input_pos_ + input_pos_incr_ + input_pos_incr_
                 );
                 ostream_.write(interpolated_val);
-                curr_output_pos_ += output_pos_incr_;
+                // TODO: replace with operator +=
+                curr_output_pos_ = curr_output_pos_ + output_pos_incr_;
             }
-            curr_input_pos_ += input_pos_incr_;
+            // TODO: replace with operator +=
+            curr_input_pos_ = curr_input_pos_ + input_pos_incr_;
         }
 
         // update the history
