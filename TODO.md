@@ -4,6 +4,8 @@
 
 - write and benchmark hermite interpolation & simd library
 
+- check that hermite interpolation works as expected (use linear function)
+
 - write and benchmark some spmc queues
 
 ## For Later

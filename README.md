@@ -3,7 +3,11 @@
 ### Summary
 - `mtra::vector` with forward & backward iterators
 
-- a `type_traits` header
+- `mtra::hermite_interpolator` for interpolating for values between samples
+
+- `mtra::poly_float` a SIMD float library (AVX2)
+
+- `type_traits` implementations
 
 - `mtra::spsc_queue_lockfree` (no tests yet)
 
