@@ -16,3 +16,11 @@ cc_test(
     ],
 )
 
+cc_binary(
+    name = "orderbook_benchmark",
+    srcs = ["orderbook_benchmark.cc"],
+    deps = [
+        ":orderbook",
+        "@google_benchmark//:benchmark_main",
+    ],
+)

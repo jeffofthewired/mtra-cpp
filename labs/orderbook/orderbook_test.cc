@@ -13,8 +13,8 @@ struct Order {
 */
 
 TEST(NaiveOrderbook, BasicOps) {
-    NaiveOrderbook<Bid> bid_book;
-    bid_book.insert({4, 100, });
+    MatchingEngine m;
+    m.insert_bid({});
 }
 
 // Okay now do some tests involving iterators
