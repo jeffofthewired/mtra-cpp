@@ -1,39 +1,38 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "spsc_queue_locked",
-    hdrs = ["spsc_queue_locked.h"],
+    name = "lockfree__spsc_queue",
+    hdrs = ["lockfree/spsc_queue.h"],
 )
 
 cc_test(
-    name = "spsc_queue_locked_test",
-    srcs = ["spsc_queue_locked_test.cc"],
+    name = "lockfree__spsc_queue_test",
+    srcs = ["lockfree/spsc_queue_test.cc"],
     deps = [
-        ":spsc_queue_locked",
-        "@googletest//:gtest_main",
-    ],
-)
-
-cc_library(
-    name = "spsc_queue_lockfree",
-    hdrs = ["spsc_queue_lockfree.h"],
-)
-
-cc_test(
-    name = "spsc_queue_lockfree_test",
-    srcs = ["spsc_queue_lockfree_test.cc"],
-    deps = [
-        ":spsc_queue_lockfree",
+        ":lockfree__spsc_queue",
         "@googletest//:gtest_main",
     ],
 )
 
 cc_binary(
-    name = "spsc_queue_comparison_benchmark",
-    srcs = ["spsc_queue_comparison_benchmark.cc"],
+    name = "lockfree__spsc_queue_benchmark",
+    srcs = ["lockfree/spsc_queue_benchmark.cc"],
     deps = [
-        ":spsc_queue_locked",
-        ":spsc_queue_lockfree",
+        ":lockfree__spsc_queue",
+        "@google_benchmark//:benchmark_main",
+    ],
+)
+
+cc_library(
+    name = "lockfree__mpmc_stack_1",
+    hdrs = ["lockfree/mpmc_stack_1.h"],
+)
+
+cc_binary(
+    name = "lockfree__mpmc_stack_1_benchmark",
+    srcs = ["lockfree/mpmc_stack_1_benchmark.cc"],
+    deps = [
+        ":lockfree__mpmc_stack_1",
         "@google_benchmark//:benchmark_main",
     ],
 )

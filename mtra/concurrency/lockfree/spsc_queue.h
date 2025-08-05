@@ -4,12 +4,13 @@
 #include <vector>
 
 namespace mtra {
+namespace lockfree {
 
 constexpr size_t cache_line_size = 64;
 
 // this only works for things that can be copied very quickly
 template <typename T, typename A>
-class spsc_queue_lockfree {
+class spsc_queue {
 public:
     using value_type = T;
     using allocator_type = A;
@@ -78,5 +79,5 @@ public:
     }
 };
 
-}
+}}
 

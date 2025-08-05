@@ -9,18 +9,15 @@
 
 - `type_traits` implementations
 
-- `mtra::spsc_queue_lockfree` (no tests yet)
+- `mtra::lockfree::spsc_queue` (no tests yet)
 
 ### Future Plans
 - write test and benchmark for `mtra::vector`
 
-- write test and benchmark for `mtra::spsc_queue_lockfree`
-
-- functional programming library
+- write test and benchmark for `mtra::lockfree::spsc_queue`
 
 - smart pointers (coming soon)
 
 - SIMD utilities will only work on architectures supporting AVX2
 
 - internal red-black-tree class
-
